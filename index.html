@@ -63,6 +63,13 @@
     #status { display: none; }
     header .bl { display: none; }
     #filename { flex: 1 1 120px; }
+    header #viewToggleBtn { display: inline-block; }
+    /* one pane at a time: edit mode by default, read mode when toggled */
+    #editor, #preview { flex-basis: 100%; width: 100%; }
+    #editor { border-right: none; }
+    #preview { display: none; }
+    body.view-read #editor { display: none; }
+    body.view-read #preview { display: block; }
   }
   button, a.btn {
     background: var(--bg);
@@ -84,6 +91,7 @@
     font-weight: 600;
   }
   button.primary:hover { filter: brightness(1.1); color: #fff; }
+  #viewToggleBtn { display: none; }  /* shown only on phone widths */
 
   main {
     flex: 1;
@@ -216,6 +224,7 @@
   <input id="filename" type="text" spellcheck="false" placeholder="filename.md">
   <div class="spacer"></div>
   <span id="status"></span>
+  <button id="viewToggleBtn" title="Switch between editing and reading (phone view)">Read</button>
   <button id="newBtn" title="Clear the editor and start fresh">New</button>
   <button id="exampleBtn" title="Restore the example document">Example</button>
   <button id="downloadBtn" class="primary" title="Download as .md file"><span class="bl">Download </span>.md</button>
@@ -273,7 +282,7 @@
     // Protect inline code from further formatting
     out = out.replace(/`([^`]+)`/g, (_, code) => {
       codeSpans.push('<code>' + code + '</code>');
-      return ' ' + (codeSpans.length - 1) + ' ';
+      return '\uE000' + (codeSpans.length - 1) + '\uE000';
     });
     out = out
       .replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, '<img alt="$1" src="$2">')
@@ -283,7 +292,7 @@
       .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>')
       .replace(/(^|[^_\w])_([^_\n]+)_(?!\w)/g, '$1<em>$2</em>')
       .replace(/~~([^~]+)~~/g, '<del>$1</del>');
-    return out.replace(/ (\d+) /g, (_, i) => codeSpans[+i]);
+    return out.replace(/\uE000(\d+)\uE000/g, (_, i) => codeSpans[+i]);
   }
 
   function render(md) {
@@ -461,6 +470,12 @@
   filenameInput.addEventListener('input', scheduleSave);
   document.getElementById('downloadBtn').addEventListener('click', download);
   document.getElementById('downloadHtmlBtn').addEventListener('click', downloadApp);
+  const viewToggleBtn = document.getElementById('viewToggleBtn');
+  viewToggleBtn.addEventListener('click', () => {
+    const reading = document.body.classList.toggle('view-read');
+    viewToggleBtn.textContent = reading ? 'Edit' : 'Read';
+    if (!reading) editor.focus();
+  });
   document.getElementById('newBtn').addEventListener('click', () => {
     if (editor.value.trim() && !confirm('Clear the editor? Your current document will be erased.')) return;
     editor.value = '';
