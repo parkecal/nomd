@@ -473,7 +473,7 @@
   const viewToggleBtn = document.getElementById('viewToggleBtn');
   viewToggleBtn.addEventListener('click', () => {
     const reading = document.body.classList.toggle('view-read');
-    viewToggleBtn.textContent = reading ? 'Edit' : 'Read';
+    viewToggleBtn.textContent = reading ? 'Edit/Read' : 'Read/Edit';
     if (!reading) editor.focus();
   });
   document.getElementById('newBtn').addEventListener('click', () => {
