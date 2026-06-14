@@ -225,6 +225,8 @@
   <div class="spacer"></div>
   <span id="status"></span>
   <button id="viewToggleBtn" title="Switch between editing and reading (phone view)">Editing Mode</button>
+  <button id="openBtn" title="Open a .md file from your computer">Open</button>
+  <input id="fileInput" type="file" accept=".md,.markdown,.txt,.text,text/markdown,text/plain" style="display:none">
   <button id="newBtn" title="Clear the editor and start fresh">Clear</button>
   <button id="exampleBtn" title="Restore the example document">Example</button>
   <button id="downloadBtn" class="primary" title="Download as .md file"><span class="bl">Download </span>.md</button>
@@ -464,12 +466,37 @@
     saveFile(source, 'text/html;charset=utf-8', 'nomd.html');
   }
 
+  /* ---------- Open a local file ---------- */
+
+  function openFile(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      editor.value = reader.result;
+      filenameInput.value = file.name;
+      updatePreview();
+      scheduleSave();
+      editor.focus();
+      statusEl.textContent = 'Opened';
+    };
+    reader.onerror = () => { statusEl.textContent = 'Open failed'; };
+    reader.readAsText(file);
+  }
+
   /* ---------- Wire up ---------- */
 
   editor.addEventListener('input', () => { updatePreview(); scheduleSave(); });
   filenameInput.addEventListener('input', scheduleSave);
   document.getElementById('downloadBtn').addEventListener('click', download);
   document.getElementById('downloadHtmlBtn').addEventListener('click', downloadApp);
+  const fileInput = document.getElementById('fileInput');
+  document.getElementById('openBtn').addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files && fileInput.files[0];
+    fileInput.value = '';  // reset so the same file can be re-opened
+    if (!file) return;
+    if (editor.value.trim() && !confirm('Open "' + file.name + '"? This will replace the current document.')) return;
+    openFile(file);
+  });
   const viewToggleBtn = document.getElementById('viewToggleBtn');
   viewToggleBtn.addEventListener('click', () => {
     const reading = document.body.classList.toggle('view-read');
