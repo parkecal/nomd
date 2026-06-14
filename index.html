@@ -575,7 +575,10 @@
   // Restore from localStorage (falling back to the old MDPad keys once)
   const savedContent = storageGet(STORE_CONTENT) ?? storageGet('mdpad.content');
   const savedName = storageGet(STORE_FILENAME) ?? storageGet('mdpad.filename');
-  filenameInput.value = savedName || defaultName();
+  // A saved auto-date name (e.g. yesterday's "2026-06-13.md") is stale on a new
+  // day — refresh it to today. A name the user typed themselves is preserved.
+  const isAutoDateName = n => /^\d{4}-\d{2}-\d{2}\.md$/.test(n);
+  filenameInput.value = (savedName && !isAutoDateName(savedName)) ? savedName : defaultName();
   editor.value = savedContent !== null ? savedContent : EXAMPLE;
   updatePreview();
   statusEl.textContent = savedContent !== null ? 'Restored' : '';
