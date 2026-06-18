@@ -1,25 +1,35 @@
-nomd
-html md editor
-hosted at nomd.dev
+# nomd
 
-MIT License
+A minimal, local-first markdown editor that runs entirely in your browser.
 
-Copyright (c) 2026 Parker Caldwell
+**→ [nomd.dev](https://nomd.dev)**
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Write markdown on the left, see it rendered on the right, and download the `.md` file when you're done. No accounts, no servers, no tracking — everything stays in your browser.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+## Features
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+- Two-pane layout: editor on the left, live preview on the right
+- Synchronized scrolling — one scroll moves both panes together
+- Local-first: your work is saved in the browser, never uploaded
+- One-click `.md` download
+- Free, ad-free, and open source
+
+## Running locally
+download the page's html and open/read source locally
+
+nomd is a static site with no build step:
+
+    git clone https://github.com/parkecal/nomd.git
+    cd nomd
+    # open index.html directly, or serve it:
+    python3 -m http.server
+
+Then visit `http://localhost:8000`.
+
+## Support
+
+nomd is free and ad-free. If you find it useful, you can [tip me on Ko-fi](https://ko-fi.com/internetparker) to help cover the domain. No pressure — the tool stays free either way.
+
+## License
+
+MIT — see [LICENSE](LICENSE). © 2026 Parker Caldwell
