@@ -22,6 +22,7 @@
   html, body {
     margin: 0;
     height: 100%;
+    height: 100dvh;  /* track the visible viewport so the mobile toolbar can't hide the footer */
     background: var(--bg);
     color: var(--text);
     font-family: "Lora", Georgia, "Times New Roman", serif;
@@ -63,6 +64,8 @@
     #status { display: none; }
     header .bl { display: none; }
     #filename { flex: 1 1 120px; }
+    /* >=16px text stops iOS Safari from auto-zooming when a field gets focus */
+    header #filename, main #editor { font-size: 16px; }
     header #viewToggleBtn { display: inline-block; }
     /* one pane at a time: edit mode by default, read mode when toggled */
     #editor, #preview { flex-basis: 100%; width: 100%; }
